@@ -1,0 +1,140 @@
+
+R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
+Copyright (C) 2017 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> 
+> 
+> library(h2o)
+
+----------------------------------------------------------------------
+
+Your next step is to start H2O:
+    > h2o.init()
+
+For H2O package documentation, ask for help:
+    > ??h2o
+
+After starting H2O, you can use the Web UI at http://localhost:54321
+For more information visit http://docs.h2o.ai
+
+----------------------------------------------------------------------
+
+
+Attaching package: 'h2o'
+
+The following objects are masked from 'package:stats':
+
+    cor, sd, var
+
+The following objects are masked from 'package:base':
+
+    %*%, %in%, &&, ||, apply, as.factor, as.numeric, colnames,
+    colnames<-, ifelse, is.character, is.factor, is.numeric, log,
+    log10, log1p, log2, round, signif, trunc
+
+> 
+> h2o.init()
+ Connection successful!
+
+R is connected to the H2O cluster: 
+    H2O cluster uptime:         4 days 13 hours 
+    H2O cluster version:        3.12.0.1 
+    H2O cluster version age:    4 months !!! 
+    H2O cluster name:           H2O_started_from_R_cmoreno_fkc366 
+    H2O cluster total nodes:    1 
+    H2O cluster total memory:   5.71 GB 
+    H2O cluster total cores:    8 
+    H2O cluster allowed cores:  8 
+    H2O cluster healthy:        TRUE 
+    H2O Connection ip:          localhost 
+    H2O Connection port:        54321 
+    H2O Connection proxy:       NA 
+    H2O Internal Security:      FALSE 
+    R Version:                  R version 3.4.0 (2017-04-21) 
+
+Warning message:
+In h2o.clusterInfo() : 
+Your H2O cluster version is too old (4 months)!
+Please download and install the latest version from http://h2o.ai/download/
+> 
+> # Import a sample binary outcome train/test set into H2O
+> train <- h2o.importFile("https://raw.githubusercontent.com/caiomsouza/ml-open-datasets/master/csv-dataset/kaggle-santander-train.csv")
+  |                                                                              |                                                                      |   0%  |                                                                              |========================================                              |  58%  |                                                                              |======================================================================| 100%
+> 
+> test <- h2o.importFile("https://raw.githubusercontent.com/caiomsouza/ml-open-datasets/master/csv-dataset/kaggle-santander-test.csv")
+  |                                                                              |                                                                      |   0%  |                                                                              |========================================                              |  57%  |                                                                              |======================================================================| 100%
+> 
+> 
+> #head(train)
+> #summary(train)
+> 
+> #head(test)
+> #summary(test)
+> 
+> 
+> aml <- h2o.automl(y = "TARGET", training_frame = train, max_runtime_secs = 60)
+  |                                                                              |                                                                      |   0%  |                                                                              |==                                                                    |   3%  |                                                                              |====                                                                  |   5%  |                                                                              |====                                                                  |   6%  |                                                                              |=====                                                                 |   6%  |                                                                              |=====                                                                 |   7%  |                                                                              |=====                                                                 |   8%  |                                                                              |======                                                                |   8%  |                                                                              |======                                                                |   9%  |                                                                              |=======                                                               |   9%  |                                                                              |=======                                                               |  10%  |                                                                              |======================================================================| 100%
+  |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
+> 
+> lb <- aml@leaderboard 
+> 
+> #lb
+> 
+> #aml
+> 
+> #aml@leader
+> #aml@project_name
+> 
+> 
+> #pred <- h2o.predict(aml, test)  # predict(aml, test) also works
+> 
+> # or:
+> 
+> pred <- h2o.predict(aml@leader, test)
+  |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
+> pred.df <- as.data.frame(pred)
+> 
+> setwd("~/GitHub/PWorld17/AutoML/output")
+> 
+> 
+> # Write CSV in R
+> write.csv(pred.df, file = "pred_h2o_automl.csv")
+> 
+> #test$ID
+> #head(test)
+> 
+> #pred.df$predict
+> 
+> testIds<-as.data.frame(test$ID)
+> 
+> submission<-data.frame(cbind(testIds,pred.df$predict))
+> 
+> colnames(submission)<-c("ID","PredictedProb")
+> 
+> write.csv(submission,"pred_h2o_automl_with_ID.csv",row.names=T)
+> 
+> write.csv(submission,"pred_h2o_automl_with_ID_no_Row_name.csv",row.names=F)
+> 
+> 
+> 
+> 
+> proc.time()
+   user  system elapsed 
+   6.39    0.54  159.21 
