@@ -61,7 +61,7 @@ R is connected to the H2O cluster:
     H2O cluster version age:    4 months !!! 
     H2O cluster name:           H2O_started_from_R_cmoreno_fkc366 
     H2O cluster total nodes:    1 
-    H2O cluster total memory:   4.88 GB 
+    H2O cluster total memory:   4.85 GB 
     H2O cluster total cores:    8 
     H2O cluster allowed cores:  8 
     H2O cluster healthy:        TRUE 
@@ -104,138 +104,73 @@ Please download and install the latest version from http://h2o.ai/download/
 > 
 > lb
                                    model_id mean_residual_deviance     rmse
-1 GLM_grid_0_AutoML_20171007_021010_model_0               0.148699 0.385615
-2  StackedEnsemble_0_AutoML_20171007_021010               0.151084 0.388695
-3              DRF_0_AutoML_20171007_021010               0.154392 0.392928
-4 GLM_grid_0_AutoML_20171007_021010_model_1               0.156186 0.395204
-5 GBM_grid_0_AutoML_20171007_021010_model_0               0.157315 0.396629
-6              XRT_0_AutoML_20171007_021010               0.163105 0.403862
+1  StackedEnsemble_0_AutoML_20171007_021648               0.143861 0.379290
+2 GLM_grid_0_AutoML_20171007_021648_model_1               0.148699 0.385615
+3              XRT_0_AutoML_20171007_021648               0.155020 0.393725
+4 GLM_grid_0_AutoML_20171007_021648_model_0               0.156186 0.395204
+5              DRF_0_AutoML_20171007_021648               0.177167 0.420912
+6 GBM_grid_0_AutoML_20171007_021648_model_0               0.224570 0.473888
        mae    rmsle
-1 0.315310 0.266876
-2 0.293756 0.269241
-3 0.274031 0.278685
+1 0.294750 0.262833
+2 0.315310 0.266876
+3 0.285129 0.277241
 4 0.316843 0.273515
-5 0.330214 0.273547
-6 0.291270 0.286753
+5 0.294559 0.298790
+6 0.456738 0.327057
 
 [6 rows x 5 columns] 
 > 
 > aml
 An object of class "H2OAutoML"
 Slot "project_name":
-[1] "automl_train_pdi_data_prep.hex_sid_92e6_1"
+[1] "automl_train_pdi_data_prep.hex_sid_810b_1"
 
 Slot "leader":
 Model Details:
 ==============
 
-H2ORegressionModel: glm
-Model ID:  GLM_grid_0_AutoML_20171007_021010_model_0 
-GLM Model: summary
-    family     link             regularization
-1 gaussian identity Ridge ( lambda = 0.01414 )
-                                                                 lambda_search
-1 nlambda = 30, lambda.max = 17.948, lambda.min = 0.01414, lambda.1se = 0.2466
-  number_of_predictors_total number_of_active_predictors number_of_iterations
-1                          7                           7                    0
-                                      training_frame
-1 automl_training_train_pdi_data_prep.hex_sid_92e6_1
+H2ORegressionModel: stackedensemble
+Model ID:  StackedEnsemble_0_AutoML_20171007_021648 
+NULL
 
-Coefficients: glm coefficients
-       names coefficients standardized_coefficients
-1  Intercept     1.035978                  0.461077
-2 Sex.female     0.237658                  0.237658
-3 Sex.male      -0.231905                 -0.231905
-4     Pclass    -0.174493                 -0.148957
-5        Age    -0.005838                 -0.085204
-6      SibSp    -0.049677                 -0.048252
-7      Parch    -0.007095                 -0.006106
-8       Fare     0.000503                  0.025634
 
-H2ORegressionMetrics: glm
+H2ORegressionMetrics: stackedensemble
 ** Reported on training data. **
 
-MSE:  0.1444534
-RMSE:  0.3800702
-MAE:  0.2968417
-RMSLE:  0.2684223
-Mean Residual Deviance :  0.1444534
-R^2 :  0.3954175
-Null Deviance :119.2265
-Null D.o.F. :498
-Residual Deviance :72.08222
-Residual D.o.F. :491
-AIC :468.6361
+MSE:  0.07911613
+RMSE:  0.2812759
+MAE:  0.2025198
+RMSLE:  0.1968709
+Mean Residual Deviance :  0.07911613
 
 
-H2ORegressionMetrics: glm
+H2ORegressionMetrics: stackedensemble
 ** Reported on validation data. **
 
-MSE:  0.1429327
-RMSE:  0.3780644
-MAE:  0.3004542
-RMSLE:  0.2684055
-Mean Residual Deviance :  0.1429327
-R^2 :  0.4177176
-Null Deviance :25.67825
-Null D.o.F. :103
-Residual Deviance :14.865
-Residual D.o.F. :96
-AIC :110.8195
+MSE:  0.1323948
+RMSE:  0.363861
+MAE:  0.2693935
+RMSLE:  0.2561413
+Mean Residual Deviance :  0.1323948
 
 
-H2ORegressionMetrics: glm
-** Reported on cross-validation data. **
-** 5-fold cross-validation on training data (Metrics computed for combined holdout predictions) **
 
-MSE:  0.1488121
-RMSE:  0.3857618
-MAE:  0.3023832
-RMSLE:  0.2722276
-Mean Residual Deviance :  0.1488121
-R^2 :  0.3771746
-Null Deviance :119.4241
-Null D.o.F. :498
-Residual Deviance :74.25726
-Residual D.o.F. :491
-AIC :483.4704
-
-
-Cross-Validation Metrics Summary: 
-                             mean          sd cv_1_valid cv_2_valid cv_3_valid
-mae                     0.3079952 0.022905074   0.337362  0.2869107  0.2878922
-mean_residual_deviance 0.14916222  0.01760445 0.17323567  0.1350213 0.13801195
-mse                    0.14916222  0.01760445 0.17323567  0.1350213 0.13801195
-null_deviance            23.88482   1.1432682  21.875755  25.116182  26.299969
-r2                      0.3737058    0.074501 0.26191363  0.4147572 0.43815136
-residual_deviance      14.7892065   1.3735296  16.110918  14.582299  14.629266
-rmse                   0.38487324 0.022746509  0.4162159 0.36745244  0.3714996
-rmsle                    0.271513 0.014923267 0.29538384 0.26346108 0.25887448
-                       cv_4_valid cv_5_valid
-mae                    0.27227947 0.35553166
-mean_residual_deviance 0.11664559 0.18289661
-mse                    0.11664559 0.18289661
-null_deviance           23.481117  22.651083
-r2                     0.51314026  0.2405665
-residual_deviance       11.431268  17.192282
-rmse                   0.34153417 0.42766413
-rmsle                  0.24320573 0.29663977
 
 Slot "leaderboard":
                                    model_id mean_residual_deviance     rmse
-1 GLM_grid_0_AutoML_20171007_021010_model_0               0.148699 0.385615
-2  StackedEnsemble_0_AutoML_20171007_021010               0.151084 0.388695
-3              DRF_0_AutoML_20171007_021010               0.154392 0.392928
-4 GLM_grid_0_AutoML_20171007_021010_model_1               0.156186 0.395204
-5 GBM_grid_0_AutoML_20171007_021010_model_0               0.157315 0.396629
-6              XRT_0_AutoML_20171007_021010               0.163105 0.403862
+1  StackedEnsemble_0_AutoML_20171007_021648               0.143861 0.379290
+2 GLM_grid_0_AutoML_20171007_021648_model_1               0.148699 0.385615
+3              XRT_0_AutoML_20171007_021648               0.155020 0.393725
+4 GLM_grid_0_AutoML_20171007_021648_model_0               0.156186 0.395204
+5              DRF_0_AutoML_20171007_021648               0.177167 0.420912
+6 GBM_grid_0_AutoML_20171007_021648_model_0               0.224570 0.473888
        mae    rmsle
-1 0.315310 0.266876
-2 0.293756 0.269241
-3 0.274031 0.278685
+1 0.294750 0.262833
+2 0.315310 0.266876
+3 0.285129 0.277241
 4 0.316843 0.273515
-5 0.330214 0.273547
-6 0.291270 0.286753
+5 0.294559 0.298790
+6 0.456738 0.327057
 
 [6 rows x 5 columns] 
 
@@ -244,99 +179,34 @@ Slot "leaderboard":
 Model Details:
 ==============
 
-H2ORegressionModel: glm
-Model ID:  GLM_grid_0_AutoML_20171007_021010_model_0 
-GLM Model: summary
-    family     link             regularization
-1 gaussian identity Ridge ( lambda = 0.01414 )
-                                                                 lambda_search
-1 nlambda = 30, lambda.max = 17.948, lambda.min = 0.01414, lambda.1se = 0.2466
-  number_of_predictors_total number_of_active_predictors number_of_iterations
-1                          7                           7                    0
-                                      training_frame
-1 automl_training_train_pdi_data_prep.hex_sid_92e6_1
+H2ORegressionModel: stackedensemble
+Model ID:  StackedEnsemble_0_AutoML_20171007_021648 
+NULL
 
-Coefficients: glm coefficients
-       names coefficients standardized_coefficients
-1  Intercept     1.035978                  0.461077
-2 Sex.female     0.237658                  0.237658
-3 Sex.male      -0.231905                 -0.231905
-4     Pclass    -0.174493                 -0.148957
-5        Age    -0.005838                 -0.085204
-6      SibSp    -0.049677                 -0.048252
-7      Parch    -0.007095                 -0.006106
-8       Fare     0.000503                  0.025634
 
-H2ORegressionMetrics: glm
+H2ORegressionMetrics: stackedensemble
 ** Reported on training data. **
 
-MSE:  0.1444534
-RMSE:  0.3800702
-MAE:  0.2968417
-RMSLE:  0.2684223
-Mean Residual Deviance :  0.1444534
-R^2 :  0.3954175
-Null Deviance :119.2265
-Null D.o.F. :498
-Residual Deviance :72.08222
-Residual D.o.F. :491
-AIC :468.6361
+MSE:  0.07911613
+RMSE:  0.2812759
+MAE:  0.2025198
+RMSLE:  0.1968709
+Mean Residual Deviance :  0.07911613
 
 
-H2ORegressionMetrics: glm
+H2ORegressionMetrics: stackedensemble
 ** Reported on validation data. **
 
-MSE:  0.1429327
-RMSE:  0.3780644
-MAE:  0.3004542
-RMSLE:  0.2684055
-Mean Residual Deviance :  0.1429327
-R^2 :  0.4177176
-Null Deviance :25.67825
-Null D.o.F. :103
-Residual Deviance :14.865
-Residual D.o.F. :96
-AIC :110.8195
+MSE:  0.1323948
+RMSE:  0.363861
+MAE:  0.2693935
+RMSLE:  0.2561413
+Mean Residual Deviance :  0.1323948
 
 
-H2ORegressionMetrics: glm
-** Reported on cross-validation data. **
-** 5-fold cross-validation on training data (Metrics computed for combined holdout predictions) **
 
-MSE:  0.1488121
-RMSE:  0.3857618
-MAE:  0.3023832
-RMSLE:  0.2722276
-Mean Residual Deviance :  0.1488121
-R^2 :  0.3771746
-Null Deviance :119.4241
-Null D.o.F. :498
-Residual Deviance :74.25726
-Residual D.o.F. :491
-AIC :483.4704
-
-
-Cross-Validation Metrics Summary: 
-                             mean          sd cv_1_valid cv_2_valid cv_3_valid
-mae                     0.3079952 0.022905074   0.337362  0.2869107  0.2878922
-mean_residual_deviance 0.14916222  0.01760445 0.17323567  0.1350213 0.13801195
-mse                    0.14916222  0.01760445 0.17323567  0.1350213 0.13801195
-null_deviance            23.88482   1.1432682  21.875755  25.116182  26.299969
-r2                      0.3737058    0.074501 0.26191363  0.4147572 0.43815136
-residual_deviance      14.7892065   1.3735296  16.110918  14.582299  14.629266
-rmse                   0.38487324 0.022746509  0.4162159 0.36745244  0.3714996
-rmsle                    0.271513 0.014923267 0.29538384 0.26346108 0.25887448
-                       cv_4_valid cv_5_valid
-mae                    0.27227947 0.35553166
-mean_residual_deviance 0.11664559 0.18289661
-mse                    0.11664559 0.18289661
-null_deviance           23.481117  22.651083
-r2                     0.51314026  0.2405665
-residual_deviance       11.431268  17.192282
-rmse                   0.34153417 0.42766413
-rmsle                  0.24320573 0.29663977
 > aml@project_name
-[1] "automl_train_pdi_data_prep.hex_sid_92e6_1"
+[1] "automl_train_pdi_data_prep.hex_sid_810b_1"
 > 
 > 
 > #pred <- h2o.predict(aml, test)  # predict(aml, test) also works
@@ -380,4 +250,4 @@ rmsle                  0.24320573 0.29663977
 > 
 > proc.time()
    user  system elapsed 
-   4.76    0.23   15.56 
+   4.54    0.26   16.28 
