@@ -1,0 +1,549 @@
+
+R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
+Copyright (C) 2017 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> # References
+> # http://h2o-release.s3.amazonaws.com/h2o/master/3888/docs-website/h2o-docs/automl.html
+> # https://www.kaggle.com/c/titanic/data
+> 
+> 
+> library(h2o)
+
+----------------------------------------------------------------------
+
+Your next step is to start H2O:
+    > h2o.init()
+
+For H2O package documentation, ask for help:
+    > ??h2o
+
+After starting H2O, you can use the Web UI at http://localhost:54321
+For more information visit http://docs.h2o.ai
+
+----------------------------------------------------------------------
+
+
+Attaching package: 'h2o'
+
+The following objects are masked from 'package:stats':
+
+    cor, sd, var
+
+The following objects are masked from 'package:base':
+
+    %*%, %in%, &&, ||, apply, as.factor, as.numeric, colnames,
+    colnames<-, ifelse, is.character, is.factor, is.numeric, log,
+    log10, log1p, log2, round, signif, trunc
+
+> h2o.init()
+
+H2O is not running yet, starting it now...
+
+Note:  In case of errors look at the following log files:
+    C:\Users\cmoreno\AppData\Local\Temp\RtmpKUTWfz/h2o_cmoreno_started_from_r.out
+    C:\Users\cmoreno\AppData\Local\Temp\RtmpKUTWfz/h2o_cmoreno_started_from_r.err
+
+java version "1.8.0_131"
+Java(TM) SE Runtime Environment (build 1.8.0_131-b11)
+Java HotSpot(TM) 64-Bit Server VM (build 25.131-b11, mixed mode)
+
+Starting H2O JVM and connecting: . Connection successful!
+
+R is connected to the H2O cluster: 
+    H2O cluster uptime:         2 seconds 976 milliseconds 
+    H2O cluster version:        3.12.0.1 
+    H2O cluster version age:    4 months !!! 
+    H2O cluster name:           H2O_started_from_R_cmoreno_pyl572 
+    H2O cluster total nodes:    1 
+    H2O cluster total memory:   7.07 GB 
+    H2O cluster total cores:    8 
+    H2O cluster allowed cores:  8 
+    H2O cluster healthy:        TRUE 
+    H2O Connection ip:          localhost 
+    H2O Connection port:        54321 
+    H2O Connection proxy:       NA 
+    H2O Internal Security:      FALSE 
+    R Version:                  R version 3.4.0 (2017-04-21) 
+
+Warning message:
+In h2o.clusterInfo() : 
+Your H2O cluster version is too old (4 months)!
+Please download and install the latest version from http://h2o.ai/download/
+> 
+> # Import a sample binary outcome train/test set into H2O
+> #train <- h2o.importFile("https://raw.githubusercontent.com/caiomsouza/ml-open-datasets/master/csv-dataset/kaggle-santander-train.csv")
+> #test <- h2o.importFile("https://raw.githubusercontent.com/caiomsouza/ml-open-datasets/master/csv-dataset/kaggle-santander-test.csv")
+> 
+> # Load Train and Test Dataset
+> train <- h2o.importFile("C:\\Users\\cmoreno\\Documents\\GitHub\\PWorld17\\Titanic\\output\\train-pdi-data-prep.csv")
+  |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
+> test <- h2o.importFile("C:\\Users\\cmoreno\\Documents\\GitHub\\PWorld17\\Titanic\\output\\test-pdi-data-prep.csv")
+  |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
+> 
+> 
+> # Check missing values
+> print(paste("missing:", sum(is.na(train)), sep = ", "))
+[1] "missing:, 177"
+> print(paste("missing:", sum(is.na(test)), sep = ", "))
+[1] "missing:, 87"
+> 
+> 
+> 
+> #train <- h2o.importFile("C:\\Users\\cmoreno\\Documents\\GitHub\\PWorld17\\Titanic\\titanic-train.csv")
+> #test <- h2o.importFile("C:\\Users\\cmoreno\\Documents\\GitHub\\PWorld17\\Titanic\\titanic-test.csv")
+> 
+> #train
+> 
+> #head(train)
+> #summary(train)
+> #head(test)
+> #summary(test)
+> 
+> # Identify predictors and response
+> y <- "TARGET"
+> x <- setdiff(names(train), y)
+> 
+> #y <- "Survived"
+> #x <- setdiff(names(train), y)
+> 
+> # For binary classification, response should be a factor
+> train[,y] <- as.factor(train[,y])
+> #test[,y] <- as.factor(test[,y])
+> 
+> #aml <- h2o.automl(y = "TARGET", training_frame = train, max_runtime_secs = 60)
+> #aml <- h2o.automl(y = "TARGET", training_frame = train, max_runtime_secs = 5)
+> 
+> #time_to_train_model = 120
+> #time_to_train_model = 1000
+> 
+> # 3 hours x 60 min x 60 sec
+> #time_to_train_model = 3600
+> #time_to_train_model = 7200
+> 
+> # 15 min = 900 sec
+> time_to_train_model = 900
+> 
+> # 30 min = 1800 sec
+> #time_to_train_model = 1800
+> 
+> 
+> aml <- h2o.automl(y = y, training_frame = train, max_runtime_secs = time_to_train_model)
+  |                                                                              |                                                                      |   0%  |                                                                              |==                                                                    |   3%  |                                                                              |====                                                                  |   5%  |                                                                              |=====                                                                 |   7%  |                                                                              |=======                                                               |   9%  |                                                                              |==========                                                            |  14%  |                                                                              |==========                                                            |  15%  |                                                                              |==============                                                        |  20%  |                                                                              |==============                                                        |  21%  |                                                                              |===============                                                       |  21%  |                                                                              |===============                                                       |  22%  |                                                                              |================                                                      |  22%  |                                                                              |================                                                      |  23%  |                                                                              |================                                                      |  24%  |                                                                              |=================                                                     |  24%  |                                                                              |=================                                                     |  25%  |                                                                              |==================                                                    |  25%  |                                                                              |==================                                                    |  26%  |                                                                              |===================                                                   |  26%  |                                                                              |===================                                                   |  27%  |                                                                              |===================                                                   |  28%  |                                                                              |====================                                                  |  28%  |                                                                              |====================                                                  |  29%  |                                                                              |=====================                                                 |  29%  |                                                                              |=====================                                                 |  30%  |                                                                              |=====================                                                 |  31%  |                                                                              |======================                                                |  31%  |                                                                              |======================                                                |  32%  |                                                                              |=======================                                               |  32%  |                                                                              |=======================                                               |  33%  |                                                                              |=======================                                               |  34%  |                                                                              |========================                                              |  34%  |                                                                              |========================                                              |  35%  |                                                                              |======================================================================| 100%
+  |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
+> 
+> lb <- aml@leaderboard 
+> 
+> lb
+                                    model_id      auc  logloss
+1  GLM_grid_0_AutoML_20171007_091132_model_1 0.866402 0.453208
+2 GBM_grid_0_AutoML_20171007_091132_model_24 0.861962 0.451749
+3 GBM_grid_0_AutoML_20171007_091132_model_17 0.858852 0.455406
+4   StackedEnsemble_0_AutoML_20171007_091132 0.853349 0.465500
+5 GBM_grid_0_AutoML_20171007_091132_model_13 0.851675 0.474894
+6  GBM_grid_0_AutoML_20171007_091132_model_9 0.851435 0.472264
+
+[32 rows x 3 columns] 
+> #lb$auc
+> 
+> aml
+An object of class "H2OAutoML"
+Slot "project_name":
+[1] "automl_RTMP_sid_ba86_3"
+
+Slot "leader":
+Model Details:
+==============
+
+H2OBinomialModel: glm
+Model ID:  GLM_grid_0_AutoML_20171007_091132_model_1 
+GLM Model: summary
+    family  link              regularization
+1 binomial logit Ridge ( lambda = 0.003387 )
+                                                                   lambda_search
+1 nlambda = 30, lambda.max = 17.948, lambda.min = 0.003387, lambda.1se = 0.05905
+  number_of_predictors_total number_of_active_predictors number_of_iterations
+1                          7                           7                   40
+                   training_frame
+1 automl_training_RTMP_sid_ba86_3
+
+Coefficients: glm coefficients
+       names coefficients standardized_coefficients
+1  Intercept     3.403748                 -0.201876
+2 Sex.female     1.212820                  1.212820
+3 Sex.male      -1.208895                 -1.208895
+4     Pclass    -1.072674                 -0.915693
+5        Age    -0.038206                 -0.557577
+6      SibSp    -0.329384                 -0.319930
+7      Parch    -0.046360                 -0.039893
+8       Fare     0.003455                  0.176135
+
+H2OBinomialMetrics: glm
+** Reported on training data. **
+
+MSE:  0.140934
+RMSE:  0.3754118
+LogLoss:  0.4465808
+Mean Per-Class Error:  0.2044912
+AUC:  0.8563301
+Gini:  0.7126601
+R^2:  0.4101471
+Residual Deviance:  445.6876
+AIC:  461.6876
+
+Confusion Matrix (vertical: actual; across: predicted) for F1-optimal threshold:
+         0   1    Error     Rate
+0      272  30 0.099338  =30/302
+1       61 136 0.309645  =61/197
+Totals 333 166 0.182365  =91/499
+
+Maximum Metrics: Maximum metrics at their respective thresholds
+                        metric threshold    value idx
+1                       max f1  0.538033 0.749311 150
+2                       max f2  0.098110 0.798180 339
+3                 max f0point5  0.681377 0.814649 106
+4                 max accuracy  0.591590 0.823647 134
+5                max precision  0.974780 1.000000   0
+6                   max recall  0.062126 1.000000 379
+7              max specificity  0.974780 1.000000   0
+8             max absolute_mcc  0.591590 0.628677 134
+9   max min_per_class_accuracy  0.376358 0.781726 196
+10 max mean_per_class_accuracy  0.538033 0.795509 150
+
+Gains/Lift Table: Extract with `h2o.gainsLift(<model>, <data>)` or `h2o.gainsLift(<model>, valid=<T/F>, xval=<T/F>)`
+H2OBinomialMetrics: glm
+** Reported on validation data. **
+
+MSE:  0.137671
+RMSE:  0.3710404
+LogLoss:  0.4396699
+Mean Per-Class Error:  0.1873823
+AUC:  0.8612053
+Gini:  0.7224105
+R^2:  0.4391527
+Residual Deviance:  91.45134
+AIC:  107.4513
+
+Confusion Matrix (vertical: actual; across: predicted) for F1-optimal threshold:
+        0  1    Error     Rate
+0      50  9 0.152542    =9/59
+1      10 35 0.222222   =10/45
+Totals 60 44 0.182692  =19/104
+
+Maximum Metrics: Maximum metrics at their respective thresholds
+                        metric threshold    value idx
+1                       max f1  0.507267 0.786517  42
+2                       max f2  0.315167 0.836820  57
+3                 max f0point5  0.642208 0.867052  30
+4                 max accuracy  0.642208 0.836538  30
+5                max precision  0.954299 1.000000   0
+6                   max recall  0.092541 1.000000  91
+7              max specificity  0.954299 1.000000   0
+8             max absolute_mcc  0.642208 0.679260  30
+9   max min_per_class_accuracy  0.413136 0.779661  47
+10 max mean_per_class_accuracy  0.642208 0.816384  30
+
+Gains/Lift Table: Extract with `h2o.gainsLift(<model>, <data>)` or `h2o.gainsLift(<model>, valid=<T/F>, xval=<T/F>)`
+H2OBinomialMetrics: glm
+** Reported on cross-validation data. **
+** 5-fold cross-validation on training data (Metrics computed for combined holdout predictions) **
+
+MSE:  0.1458829
+RMSE:  0.3819462
+LogLoss:  0.461399
+Mean Per-Class Error:  0.2087942
+AUC:  0.8464971
+Gini:  0.6929943
+R^2:  0.3894343
+Residual Deviance:  460.4762
+AIC:  476.4762
+
+Confusion Matrix (vertical: actual; across: predicted) for F1-optimal threshold:
+         0   1    Error     Rate
+0      274  28 0.092715  =28/302
+1       64 133 0.324873  =64/197
+Totals 338 161 0.184369  =92/499
+
+Maximum Metrics: Maximum metrics at their respective thresholds
+                        metric threshold    value idx
+1                       max f1  0.560237 0.743017 143
+2                       max f2  0.154568 0.788530 288
+3                 max f0point5  0.601807 0.806658 129
+4                 max accuracy  0.601807 0.817635 129
+5                max precision  0.984752 1.000000   0
+6                   max recall  0.055034 1.000000 388
+7              max specificity  0.984752 1.000000   0
+8             max absolute_mcc  0.601807 0.616037 129
+9   max min_per_class_accuracy  0.377308 0.766497 192
+10 max mean_per_class_accuracy  0.560237 0.791206 143
+
+Gains/Lift Table: Extract with `h2o.gainsLift(<model>, <data>)` or `h2o.gainsLift(<model>, valid=<T/F>, xval=<T/F>)`
+Cross-Validation Metrics Summary: 
+                mean          sd cv_1_valid cv_2_valid cv_3_valid cv_4_valid
+accuracy   0.8224376 0.026611337  0.8064516  0.8611111  0.8113208 0.86734694
+auc       0.84562576 0.034812335  0.7995074 0.84318095  0.8811594  0.9178618
+err       0.17756243 0.026611337 0.19354838  0.1388889 0.18867925 0.13265306
+err_count       17.6   2.3065126       18.0       15.0       20.0       13.0
+f0point5  0.78571886 0.030167878  0.7615894  0.8490566  0.7633588 0.82125604
+          cv_5_valid
+accuracy   0.7659575
+auc       0.78641915
+err       0.23404256
+err_count       22.0
+f0point5  0.73333335
+
+---
+                        mean          sd cv_1_valid cv_2_valid cv_3_valid
+precision          0.8058165  0.03699304 0.79310346        0.9  0.7407407
+r2                0.38574752  0.07651457 0.27835885 0.43525097 0.43041217
+recall             0.7339516  0.08309749  0.6571429  0.6923077  0.8695652
+residual_deviance   91.24289    7.365395   97.69898  90.902306   93.25311
+rmse              0.38103718 0.023959624 0.41155294 0.36096147 0.37404945
+specificity        0.8754008 0.043905206  0.8965517 0.95652175 0.76666665
+                  cv_4_valid cv_5_valid
+precision          0.8095238 0.78571427
+r2                0.53809655  0.2466191
+recall             0.8717949 0.57894737
+residual_deviance  71.954414  102.40565
+rmse              0.33266556 0.42595652
+specificity       0.86440676 0.89285713
+
+Slot "leaderboard":
+                                    model_id      auc  logloss
+1  GLM_grid_0_AutoML_20171007_091132_model_1 0.866402 0.453208
+2 GBM_grid_0_AutoML_20171007_091132_model_24 0.861962 0.451749
+3 GBM_grid_0_AutoML_20171007_091132_model_17 0.858852 0.455406
+4   StackedEnsemble_0_AutoML_20171007_091132 0.853349 0.465500
+5 GBM_grid_0_AutoML_20171007_091132_model_13 0.851675 0.474894
+6  GBM_grid_0_AutoML_20171007_091132_model_9 0.851435 0.472264
+
+[32 rows x 3 columns] 
+
+> 
+> aml@leader
+Model Details:
+==============
+
+H2OBinomialModel: glm
+Model ID:  GLM_grid_0_AutoML_20171007_091132_model_1 
+GLM Model: summary
+    family  link              regularization
+1 binomial logit Ridge ( lambda = 0.003387 )
+                                                                   lambda_search
+1 nlambda = 30, lambda.max = 17.948, lambda.min = 0.003387, lambda.1se = 0.05905
+  number_of_predictors_total number_of_active_predictors number_of_iterations
+1                          7                           7                   40
+                   training_frame
+1 automl_training_RTMP_sid_ba86_3
+
+Coefficients: glm coefficients
+       names coefficients standardized_coefficients
+1  Intercept     3.403748                 -0.201876
+2 Sex.female     1.212820                  1.212820
+3 Sex.male      -1.208895                 -1.208895
+4     Pclass    -1.072674                 -0.915693
+5        Age    -0.038206                 -0.557577
+6      SibSp    -0.329384                 -0.319930
+7      Parch    -0.046360                 -0.039893
+8       Fare     0.003455                  0.176135
+
+H2OBinomialMetrics: glm
+** Reported on training data. **
+
+MSE:  0.140934
+RMSE:  0.3754118
+LogLoss:  0.4465808
+Mean Per-Class Error:  0.2044912
+AUC:  0.8563301
+Gini:  0.7126601
+R^2:  0.4101471
+Residual Deviance:  445.6876
+AIC:  461.6876
+
+Confusion Matrix (vertical: actual; across: predicted) for F1-optimal threshold:
+         0   1    Error     Rate
+0      272  30 0.099338  =30/302
+1       61 136 0.309645  =61/197
+Totals 333 166 0.182365  =91/499
+
+Maximum Metrics: Maximum metrics at their respective thresholds
+                        metric threshold    value idx
+1                       max f1  0.538033 0.749311 150
+2                       max f2  0.098110 0.798180 339
+3                 max f0point5  0.681377 0.814649 106
+4                 max accuracy  0.591590 0.823647 134
+5                max precision  0.974780 1.000000   0
+6                   max recall  0.062126 1.000000 379
+7              max specificity  0.974780 1.000000   0
+8             max absolute_mcc  0.591590 0.628677 134
+9   max min_per_class_accuracy  0.376358 0.781726 196
+10 max mean_per_class_accuracy  0.538033 0.795509 150
+
+Gains/Lift Table: Extract with `h2o.gainsLift(<model>, <data>)` or `h2o.gainsLift(<model>, valid=<T/F>, xval=<T/F>)`
+H2OBinomialMetrics: glm
+** Reported on validation data. **
+
+MSE:  0.137671
+RMSE:  0.3710404
+LogLoss:  0.4396699
+Mean Per-Class Error:  0.1873823
+AUC:  0.8612053
+Gini:  0.7224105
+R^2:  0.4391527
+Residual Deviance:  91.45134
+AIC:  107.4513
+
+Confusion Matrix (vertical: actual; across: predicted) for F1-optimal threshold:
+        0  1    Error     Rate
+0      50  9 0.152542    =9/59
+1      10 35 0.222222   =10/45
+Totals 60 44 0.182692  =19/104
+
+Maximum Metrics: Maximum metrics at their respective thresholds
+                        metric threshold    value idx
+1                       max f1  0.507267 0.786517  42
+2                       max f2  0.315167 0.836820  57
+3                 max f0point5  0.642208 0.867052  30
+4                 max accuracy  0.642208 0.836538  30
+5                max precision  0.954299 1.000000   0
+6                   max recall  0.092541 1.000000  91
+7              max specificity  0.954299 1.000000   0
+8             max absolute_mcc  0.642208 0.679260  30
+9   max min_per_class_accuracy  0.413136 0.779661  47
+10 max mean_per_class_accuracy  0.642208 0.816384  30
+
+Gains/Lift Table: Extract with `h2o.gainsLift(<model>, <data>)` or `h2o.gainsLift(<model>, valid=<T/F>, xval=<T/F>)`
+H2OBinomialMetrics: glm
+** Reported on cross-validation data. **
+** 5-fold cross-validation on training data (Metrics computed for combined holdout predictions) **
+
+MSE:  0.1458829
+RMSE:  0.3819462
+LogLoss:  0.461399
+Mean Per-Class Error:  0.2087942
+AUC:  0.8464971
+Gini:  0.6929943
+R^2:  0.3894343
+Residual Deviance:  460.4762
+AIC:  476.4762
+
+Confusion Matrix (vertical: actual; across: predicted) for F1-optimal threshold:
+         0   1    Error     Rate
+0      274  28 0.092715  =28/302
+1       64 133 0.324873  =64/197
+Totals 338 161 0.184369  =92/499
+
+Maximum Metrics: Maximum metrics at their respective thresholds
+                        metric threshold    value idx
+1                       max f1  0.560237 0.743017 143
+2                       max f2  0.154568 0.788530 288
+3                 max f0point5  0.601807 0.806658 129
+4                 max accuracy  0.601807 0.817635 129
+5                max precision  0.984752 1.000000   0
+6                   max recall  0.055034 1.000000 388
+7              max specificity  0.984752 1.000000   0
+8             max absolute_mcc  0.601807 0.616037 129
+9   max min_per_class_accuracy  0.377308 0.766497 192
+10 max mean_per_class_accuracy  0.560237 0.791206 143
+
+Gains/Lift Table: Extract with `h2o.gainsLift(<model>, <data>)` or `h2o.gainsLift(<model>, valid=<T/F>, xval=<T/F>)`
+Cross-Validation Metrics Summary: 
+                mean          sd cv_1_valid cv_2_valid cv_3_valid cv_4_valid
+accuracy   0.8224376 0.026611337  0.8064516  0.8611111  0.8113208 0.86734694
+auc       0.84562576 0.034812335  0.7995074 0.84318095  0.8811594  0.9178618
+err       0.17756243 0.026611337 0.19354838  0.1388889 0.18867925 0.13265306
+err_count       17.6   2.3065126       18.0       15.0       20.0       13.0
+f0point5  0.78571886 0.030167878  0.7615894  0.8490566  0.7633588 0.82125604
+          cv_5_valid
+accuracy   0.7659575
+auc       0.78641915
+err       0.23404256
+err_count       22.0
+f0point5  0.73333335
+
+---
+                        mean          sd cv_1_valid cv_2_valid cv_3_valid
+precision          0.8058165  0.03699304 0.79310346        0.9  0.7407407
+r2                0.38574752  0.07651457 0.27835885 0.43525097 0.43041217
+recall             0.7339516  0.08309749  0.6571429  0.6923077  0.8695652
+residual_deviance   91.24289    7.365395   97.69898  90.902306   93.25311
+rmse              0.38103718 0.023959624 0.41155294 0.36096147 0.37404945
+specificity        0.8754008 0.043905206  0.8965517 0.95652175 0.76666665
+                  cv_4_valid cv_5_valid
+precision          0.8095238 0.78571427
+r2                0.53809655  0.2466191
+recall             0.8717949 0.57894737
+residual_deviance  71.954414  102.40565
+rmse              0.33266556 0.42595652
+specificity       0.86440676 0.89285713
+> aml@project_name
+[1] "automl_RTMP_sid_ba86_3"
+> 
+> 
+> #pred <- h2o.predict(aml, test)  # predict(aml, test) also works
+> 
+> # or:
+> 
+> pred <- h2o.predict(aml@leader, test)
+  |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
+> pred.df <- as.data.frame(pred)
+> 
+> #setwd("~/GitHub/PWorld17/AutoML/output")
+> 
+> 
+> # Write CSV in R
+> write.csv(pred.df, file = "C:\\Users\\cmoreno\\Documents\\GitHub\\PWorld17\\Titanic\\output\\only-predictions_h2o_automl_titanic.csv")
+> 
+> #pred.df
+> #test
+> #test$PassengerId
+> #test$ID
+> #head(test)
+> #pred.df$predict
+> #test$
+> 
+> #testPassengerId <- as.data.frame(test$PassengerId)
+> submission<-data.frame(cbind(testPassengerId,pred.df$predict))
+> colnames(submission)<-c("PassengerId","Survived")
+> 
+> 
+> # Write dataset
+> write.csv(submission,"C:\\Users\\cmoreno\\Documents\\GitHub\\PWorld17\\Titanic\\output\\kaggle-submission-file-h2o_automl-titanic.csv",row.names=F)
+> 
+> ###
+> 
+> #test$PassengerId
+> #testPassengerId <- as.data.frame(test$PassengerId)
+> 
+> submission<-data.frame(cbind(testPassengerId,pred.df))
+> #submission
+> 
+> colnames(submission)<-c("PassengerId","predict", "p0","p1")
+> 
+> 
+> # Write dataset
+> write.csv(submission,"C:\\Users\\cmoreno\\Documents\\GitHub\\PWorld17\\Titanic\\output\\full-results-predictions-h2o_automl-titanic.csv",row.names=F)
+> 
+> #Sys.setlocale("LC_MESSAGES", 'en_US.UTF-8') 
+> #Sys.setenv(LANG = "en_US.UTF-8")
+> 
+> 
+> proc.time()
+   user  system elapsed 
+  10.79    0.68  920.39 

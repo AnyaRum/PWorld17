@@ -14,6 +14,13 @@ h2o.init()
 train <- h2o.importFile("C:\\Users\\cmoreno\\Documents\\GitHub\\PWorld17\\Titanic\\output\\train-pdi-data-prep.csv")
 test <- h2o.importFile("C:\\Users\\cmoreno\\Documents\\GitHub\\PWorld17\\Titanic\\output\\test-pdi-data-prep.csv")
 
+
+# Check missing values
+print(paste("missing:", sum(is.na(train)), sep = ", "))
+print(paste("missing:", sum(is.na(test)), sep = ", "))
+
+
+
 #train <- h2o.importFile("C:\\Users\\cmoreno\\Documents\\GitHub\\PWorld17\\Titanic\\titanic-train.csv")
 #test <- h2o.importFile("C:\\Users\\cmoreno\\Documents\\GitHub\\PWorld17\\Titanic\\titanic-test.csv")
 
@@ -41,7 +48,16 @@ train[,y] <- as.factor(train[,y])
 #time_to_train_model = 120
 #time_to_train_model = 1000
 
-time_to_train_model = 60
+# 3 hours x 60 min x 60 sec
+#time_to_train_model = 3600
+#time_to_train_model = 7200
+
+# 15 min = 900 sec
+time_to_train_model = 900
+
+# 30 min = 1800 sec
+#time_to_train_model = 1800
+
 
 aml <- h2o.automl(y = y, training_frame = train, max_runtime_secs = time_to_train_model)
 
@@ -99,5 +115,6 @@ colnames(submission)<-c("PassengerId","predict", "p0","p1")
 # Write dataset
 write.csv(submission,"C:\\Users\\cmoreno\\Documents\\GitHub\\PWorld17\\Titanic\\output\\full-results-predictions-h2o_automl-titanic.csv",row.names=F)
 
-
+#Sys.setlocale("LC_MESSAGES", 'en_US.UTF-8') 
+#Sys.setenv(LANG = "en_US.UTF-8")
 
