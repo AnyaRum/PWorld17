@@ -13,7 +13,7 @@
   <parameters>
     <parameter>
       <name>r_file_path</name>
-      <default_value>h2o_automl_titanic.R</default_value>
+      <default_value>h2o_automl_titanic_binary_classification.R</default_value>
       <description>R Script File Path</description>
     </parameter>
     <parameter>

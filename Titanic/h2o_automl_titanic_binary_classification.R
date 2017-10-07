@@ -14,6 +14,11 @@ h2o.init()
 train <- h2o.importFile("C:\\Users\\cmoreno\\Documents\\GitHub\\PWorld17\\Titanic\\output\\train-pdi-data-prep.csv")
 test <- h2o.importFile("C:\\Users\\cmoreno\\Documents\\GitHub\\PWorld17\\Titanic\\output\\test-pdi-data-prep.csv")
 
+#train <- h2o.importFile("C:\\Users\\cmoreno\\Documents\\GitHub\\PWorld17\\Titanic\\titanic-train.csv")
+#test <- h2o.importFile("C:\\Users\\cmoreno\\Documents\\GitHub\\PWorld17\\Titanic\\titanic-test.csv")
+
+#train
+
 #head(train)
 #summary(train)
 #head(test)
@@ -23,18 +28,28 @@ test <- h2o.importFile("C:\\Users\\cmoreno\\Documents\\GitHub\\PWorld17\\Titanic
 y <- "TARGET"
 x <- setdiff(names(train), y)
 
+#y <- "Survived"
+#x <- setdiff(names(train), y)
+
 # For binary classification, response should be a factor
 train[,y] <- as.factor(train[,y])
-test[,y] <- as.factor(test[,y])
+#test[,y] <- as.factor(test[,y])
 
 #aml <- h2o.automl(y = "TARGET", training_frame = train, max_runtime_secs = 60)
 #aml <- h2o.automl(y = "TARGET", training_frame = train, max_runtime_secs = 5)
 
-aml <- h2o.automl(y = y, training_frame = train, max_runtime_secs = 60)
+#time_to_train_model = 120
+#time_to_train_model = 1000
+
+time_to_train_model = 60
+
+aml <- h2o.automl(y = y, training_frame = train, max_runtime_secs = time_to_train_model)
 
 lb <- aml@leaderboard 
 
 lb
+#lb$auc
+
 aml
 
 aml@leader
